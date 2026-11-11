@@ -1,0 +1,18 @@
+---
+// §5.2 / §10 — one project. index 0 is the featured row; even rows flip media side.
+import type { CollectionEntry } from "astro:content";
+import ProjectMedia from "./ProjectMedia.astro";
+
+interface Props {
+  project: CollectionEntry<"projects">;
+  index: number;
+}
+
+const { project } = Astro.props;
+const { title } = project.data;
+---
+
+<article>
+  <h3>{title}</h3>
+  <ProjectMedia media={project.data.media} />
+</article>

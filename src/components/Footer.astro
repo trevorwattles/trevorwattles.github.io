@@ -1,0 +1,14 @@
+---
+// §5.5 — email sentence, links, "Last updated <Month YYYY>" from build date.
+const updated = new Date().toLocaleDateString("en-US", {
+  month: "long",
+  year: "numeric",
+});
+---
+
+<footer id="contact" aria-labelledby="contact-heading">
+  <h2 id="contact-heading">Contact</h2>
+  <p>
+    <small>Last updated {updated}</small>
+  </p>
+</footer>

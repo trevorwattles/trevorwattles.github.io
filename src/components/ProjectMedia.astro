@@ -1,0 +1,9 @@
+---
+// §7 / §10 — hero media plus up to two thumbnails; all open the lightbox.
+// Wired up in Phase 3.
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  media: CollectionEntry<"projects">["data"]["media"];
+}
+---

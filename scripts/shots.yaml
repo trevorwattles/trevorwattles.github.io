@@ -1,0 +1,11 @@
+# §9 — one entry per screen. Run each app locally with MOCK DATA first.
+# Filled in Phase 3. Example:
+#
+# - project: d2d-crm
+#   name: payouts
+#   url: http://localhost:3000/payouts
+#   viewport: { width: 1440, height: 900 }
+#   deviceScaleFactor: 2
+#   waitFor: "[data-testid=payout-table]"
+#   hide: [".dev-banner"]
+#   out: src/assets/projects/d2d-crm/payouts.png

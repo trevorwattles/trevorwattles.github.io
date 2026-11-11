@@ -1,0 +1,55 @@
+---
+// Self-hosted fonts (§4.2). Each CSS file declares unicode-range subsets,
+// so the browser only downloads the subsets the page actually uses.
+import "@fontsource-variable/source-serif-4/opsz.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "../styles/tokens.css";
+import "../styles/global.css";
+
+// Preload only body regular + heading face (§4.2).
+import serifUrl from "@fontsource-variable/source-serif-4/files/source-serif-4-latin-opsz-normal.woff2?url";
+import sansUrl from "@fontsource/ibm-plex-sans/files/ibm-plex-sans-latin-400-normal.woff2?url";
+
+interface Props {
+  title?: string;
+  // TODO(Phase 4): meta description from the approved intro sentence (§11).
+  description?: string;
+}
+
+const { title = "Trevor Wattles — Software Developer", description } =
+  Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link
+      rel="preload"
+      href={serifUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href={sansUrl}
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <meta name="generator" content={Astro.generator} />
+  </head>
+  <body>
+    <a class="skip-link" href="#work">
+      Skip to work
+    </a>
+    <slot />
+  </body>
+</html>

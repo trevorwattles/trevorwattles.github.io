@@ -1,0 +1,28 @@
+{
+  "name": "trevor-wattles-portfolio",
+  "type": "module",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "dependencies": {
+    "@fontsource-variable/source-serif-4": "^5.3.1",
+    "@fontsource/ibm-plex-mono": "^5.3.0",
+    "@fontsource/ibm-plex-sans": "^5.3.0",
+    "astro": "^7.4.10"
+  },
+  "devDependencies": {
+    "playwright": "^1.65.0",
+    "prettier": "^3.10.0",
+    "prettier-plugin-astro": "^1.1.2"
+  },
+  "private": true
+}

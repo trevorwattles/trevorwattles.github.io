@@ -1,0 +1,21 @@
+---
+// §5 / §10 — plain links. Styling and optional section highlight come in Phase 2.
+const links = [
+  { href: "#work", label: "Work" },
+  { href: "#experience", label: "Experience" },
+  { href: "#about", label: "About" },
+  // TODO: Trevor provides public/resume/Trevor_Wattles_Resume.pdf
+  { href: "/resume/Trevor_Wattles_Resume.pdf", label: "Resume" },
+  { href: "#contact", label: "Contact" },
+];
+---
+
+<nav aria-label="Main">
+  <ul>
+    {links.map((l) => (
+      <li>
+        <a href={l.href}>{l.label}</a>
+      </li>
+    ))}
+  </ul>
+</nav>

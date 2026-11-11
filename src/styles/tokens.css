@@ -1,0 +1,45 @@
+/* Design tokens — Direction A, Editorial (CLAUDE.md §4).
+   The only file allowed to contain raw color values. */
+
+:root {
+  /* §4.1 Color — light theme only at launch */
+  --paper: #faf8f4; /* page background */
+  --paper-2: #f2eee6; /* subtle panels, figure backgrounds */
+  --ink: #1f1d1a; /* body text */
+  --ink-2: #4a453e; /* secondary text */
+  --muted: #6b655c; /* captions, labels (check AA on --paper) */
+  --rule: #e2dbcf; /* hairlines, screenshot borders */
+  --accent: #a4472a; /* links, small highlights — Utah red rock */
+  --accent-ink: #84361f; /* link hover/active */
+  --focus: #a4472a;
+
+  /* §4.2 Typography */
+  --font-serif: "Source Serif 4 Variable", "Source Serif 4", Georgia, serif;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+
+  --step--1: 0.875rem; /* 14px  labels, captions */
+  --step-0: 1.0625rem; /* 17px  body */
+  --step-1: 1.25rem; /* 20px  lead text */
+  --step-2: 1.5rem; /* 24px  project titles */
+  --step-3: 1.8125rem; /* 29px  section headings */
+  --step-4: 2.1875rem; /* 35px  name on mobile */
+  --step-5: 2.625rem; /* 42px  name on desktop */
+  --leading-body: 1.6;
+  --leading-tight: 1.15;
+  --measure: 38rem; /* max line length for prose */
+
+  /* §4.3 Space and layout */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.5rem;
+  --space-6: 2rem;
+  --space-7: 3rem;
+  --space-8: 4.5rem;
+  --space-9: 7rem;
+  --wide: 72rem; /* max width for project rows */
+  --gutter: clamp(1rem, 4vw, 2rem);
+  --radius: 4px; /* screenshots only; text blocks are square */
+}
