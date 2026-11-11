@@ -4,7 +4,7 @@
 intro: Backend developer at BYU Law School and full-stack developer at EnrollPro. I build Node.js and Express APIs on MySQL and AWS, and I graduate from BYU in Computer Science in April 2027.
 location: Vineyard, Utah
 availability: Open to full-time roles from May 2027 # TODO: confirm wording
-email: "" # TODO: public email address
+email: trevorwattles@gmail.com
 github: https://github.com/trevorwattles
 linkedin: https://www.linkedin.com/in/trevor-wattles-b5954a395/
 resume: /resume/Trevor_Wattles_Resume.pdf # TODO: add the PDF to public/resume/
