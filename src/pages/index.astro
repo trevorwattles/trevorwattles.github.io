@@ -23,24 +23,27 @@ const others = SHOW_OTHER_PROJECTS
   <main>
     <Intro />
 
-    <section id="work" aria-labelledby="work-heading">
+    <section id="work" class="section wrap" aria-labelledby="work-heading">
       <h2 id="work-heading">Selected work</h2>
       {projects.map((project, index) => (
         <ProjectRow project={project} index={index} />
       ))}
       {others.length > 0 && (
-        <ul>
-          {others.map((o) => (
-            <li>
-              {o.data.link ? (
-                <a href={o.data.link}>{o.data.title}</a>
-              ) : (
-                o.data.title
-              )}{" "}
-              — {o.data.oneLiner}
-            </li>
-          ))}
-        </ul>
+        <div class="others">
+          <h3 class="label">Other projects</h3>
+          <ul>
+            {others.map((o) => (
+              <li>
+                {o.data.link ? (
+                  <a href={o.data.link}>{o.data.title}</a>
+                ) : (
+                  o.data.title
+                )}{" "}
+                — {o.data.oneLiner}
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
     </section>
 
@@ -50,3 +53,15 @@ const others = SHOW_OTHER_PROJECTS
   <Footer />
   <Lightbox />
 </Base>
+
+<style>
+  .others {
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--rule);
+  }
+
+  .others ul {
+    margin-top: var(--space-3);
+    padding-left: 1.1em;
+  }
+</style>

@@ -1,21 +1,81 @@
 ---
-// §5 / §10 — plain links. Styling and optional section highlight come in Phase 2.
+// §5 / §10 — plain links. Sticky with a hairline on desktop, static on mobile.
+import { getSite } from "../lib/site";
+
+const { data } = await getSite();
 const links = [
   { href: "#work", label: "Work" },
   { href: "#experience", label: "Experience" },
   { href: "#about", label: "About" },
-  // TODO: Trevor provides public/resume/Trevor_Wattles_Resume.pdf
-  { href: "/resume/Trevor_Wattles_Resume.pdf", label: "Resume" },
+  { href: data.resume, label: "Resume" },
   { href: "#contact", label: "Contact" },
 ];
 ---
 
-<nav aria-label="Main">
-  <ul>
-    {links.map((l) => (
-      <li>
-        <a href={l.href}>{l.label}</a>
-      </li>
-    ))}
-  </ul>
-</nav>
+<div class="bar">
+  <nav class="wrap" aria-label="Main">
+    <a class="home" href="#top">
+      Trevor Wattles
+    </a>
+    <ul>
+      {links.map((l) => (
+        <li>
+          <a href={l.href}>{l.label}</a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</div>
+
+<style>
+  .bar {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-2) var(--space-5);
+    padding-block: var(--space-4);
+  }
+
+  .home {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: var(--step-1);
+    color: var(--ink);
+    text-decoration: none;
+  }
+
+  ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-1) var(--space-5);
+    padding: 0;
+    list-style: none;
+  }
+
+  ul a {
+    font-size: var(--step--1);
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+
+  ul a:hover {
+    color: var(--accent);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+  }
+
+  @media (min-width: 760px) {
+    .bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+  }
+</style>

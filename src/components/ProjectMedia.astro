@@ -1,9 +1,116 @@
 ---
-// §7 / §10 — hero media plus up to two thumbnails; all open the lightbox.
-// Wired up in Phase 3.
+// §7 / §10 — hero image plus up to two thumbnails.
+// Images live in src/assets/projects/<slug>/ and are listed in the project's
+// `media` frontmatter. With no media, a 16:10 placeholder stands in.
+// Each image links to its full-size file (works without JS); the lightbox
+// enhances these links in Phase 3. Video loops also arrive in Phase 3.
+import { Picture } from "astro:assets";
+import type { ImageMetadata } from "astro";
 import type { CollectionEntry } from "astro:content";
 
+type Media = CollectionEntry<"projects">["data"]["media"];
+
 interface Props {
-  media: CollectionEntry<"projects">["data"]["media"];
+  media: Media;
+  slug: string;
+  featured: boolean;
 }
+
+const { media, slug, featured } = Astro.props;
+
+const images = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/projects/**/*.{png,jpg,jpeg,webp,avif}",
+  { eager: true },
+);
+
+const items = media
+  .filter((m) => m.type === "image")
+  .map((m) => {
+    const path = `/src/assets/projects/${slug}/${m.src}`;
+    const img = images[path]?.default;
+    if (!img) throw new Error(`Image not found: ${path}`);
+    return { ...m, img };
+  });
+
+const [hero, ...thumbs] = items;
+const heroSizes = featured
+  ? "(min-width: 76rem) 72rem, calc(100vw - 2rem)"
+  : "(min-width: 760px) 55vw, calc(100vw - 2rem)";
 ---
+
+{hero ? (
+  <figure>
+    <a class="frame" href={hero.img.src}>
+      <Picture
+        src={hero.img}
+        alt={hero.alt}
+        formats={["avif", "webp"]}
+        widths={[640, 960, 1280, 1920, 2560]}
+        sizes={heroSizes}
+        loading={featured ? "eager" : "lazy"}
+      />
+    </a>
+    {hero.caption && <figcaption class="label">{hero.caption}</figcaption>}
+  </figure>
+) : (
+  <div class="frame placeholder" aria-hidden="true">
+    <span class="label">Screenshot coming soon</span>
+  </div>
+)}
+{thumbs.length > 0 && (
+  <div class="thumbs">
+    {thumbs.map((t) => (
+      <figure>
+        <a class="frame" href={t.img.src}>
+          <Picture
+            src={t.img}
+            alt={t.alt}
+            formats={["avif", "webp"]}
+            widths={[480, 960]}
+            sizes="(min-width: 760px) 28vw, 50vw"
+            loading="lazy"
+          />
+        </a>
+        {t.caption && <figcaption class="label">{t.caption}</figcaption>}
+      </figure>
+    ))}
+  </div>
+)}
+
+<style>
+  figure {
+    margin: 0;
+  }
+
+  .frame {
+    display: block;
+    overflow: hidden;
+    border: 1px solid var(--rule);
+    border-radius: var(--radius);
+    background: var(--paper-2);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 0.06);
+  }
+
+  .frame :global(img) {
+    width: 100%;
+    height: auto;
+  }
+
+  .placeholder {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+    box-shadow: none;
+  }
+
+  figcaption {
+    margin-top: var(--space-2);
+  }
+
+  .thumbs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+</style>

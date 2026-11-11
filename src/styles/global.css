@@ -85,6 +85,57 @@ a:active {
   outline-offset: 3px;
 }
 
+/* Layout helpers */
+.wrap {
+  width: min(var(--wide), 100% - 2 * var(--gutter));
+  margin-inline: auto;
+}
+
+.section {
+  border-top: 1px solid var(--rule);
+  padding-block: var(--space-7);
+}
+
+.section > h2 {
+  margin-bottom: var(--space-6);
+}
+
+@media (min-width: 760px) {
+  .section {
+    padding-block: var(--space-8);
+  }
+
+  /* keep anchor targets clear of the sticky nav */
+  [id] {
+    scroll-margin-top: var(--space-8);
+  }
+}
+
+/* Small monospace labels (§4.2) */
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.02em;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+/* Inline link rows separated by a middle dot */
+.link-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* dot trails each item so a wrapped line never starts with one */
+.link-row li:not(:last-child)::after {
+  content: "·";
+  margin-inline: var(--space-3);
+  color: var(--muted);
+}
+
 /* Skip link: hidden until focused */
 .skip-link {
   position: absolute;

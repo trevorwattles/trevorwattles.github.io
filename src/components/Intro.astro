@@ -1,8 +1,92 @@
 ---
-// §5.1 — photo, name, one sentence, mono label line, contact links.
-// Copy is written in Phase 1; layout in Phase 2.
+// §5.1 — photo left, name + one sentence + label line + links right.
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import LinkRow from "./LinkRow.astro";
+import { getSite } from "../lib/site";
+
+const { data } = await getSite();
+
+// §8 — drop the headshot at src/assets/me.jpg and it replaces the placeholder.
+const photos = import.meta.glob<{ default: ImageMetadata }>(
+  "/src/assets/me.{jpg,jpeg,png,webp}",
+  { eager: true },
+);
+const photo = Object.values(photos)[0]?.default;
 ---
 
-<header>
-  <h1>Trevor Wattles</h1>
+<header id="top" class="intro wrap">
+  {photo ? (
+    <Image
+      class="photo"
+      src={photo}
+      alt="Trevor Wattles"
+      width={200}
+      height={200}
+      densities={[1, 2]}
+      loading="eager"
+      fetchpriority="high"
+    />
+  ) : (
+    <div class="photo placeholder" aria-hidden="true">
+      TW
+    </div>
+  )}
+  <div class="text">
+    <h1>Trevor Wattles</h1>
+    <p class="lead">{data.intro}</p>
+    <p class="label">
+      {data.location} · {data.availability}
+    </p>
+    <LinkRow />
+  </div>
 </header>
+
+<style>
+  .intro {
+    display: grid;
+    gap: var(--space-5);
+    padding-block: var(--space-7);
+  }
+
+  .photo {
+    width: 120px;
+    height: 120px;
+    border-radius: var(--radius);
+    object-fit: cover;
+  }
+
+  .placeholder {
+    display: grid;
+    place-items: center;
+    background: var(--paper-2);
+    border: 1px solid var(--rule);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: var(--step-3);
+    color: var(--muted);
+  }
+
+  .text > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .lead {
+    font-size: var(--step-1);
+    color: var(--ink-2);
+  }
+
+  @media (min-width: 760px) {
+    .intro {
+      grid-template-columns: 200px 1fr;
+      gap: var(--space-7);
+      align-items: start;
+      padding-block: var(--space-8);
+    }
+
+    .photo {
+      width: 200px;
+      height: 200px;
+    }
+  }
+</style>

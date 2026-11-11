@@ -1,14 +1,40 @@
 ---
 // §5.5 — email sentence, links, "Last updated <Month YYYY>" from build date.
+import LinkRow from "./LinkRow.astro";
+import { getSite } from "../lib/site";
+
+const { data } = await getSite();
 const updated = new Date().toLocaleDateString("en-US", {
   month: "long",
   year: "numeric",
 });
 ---
 
-<footer id="contact" aria-labelledby="contact-heading">
+<footer id="contact" class="section wrap" aria-labelledby="contact-heading">
   <h2 id="contact-heading">Contact</h2>
-  <p>
-    <small>Last updated {updated}</small>
+  <p class="email">
+    {data.email ? (
+      <>
+        Email me at <a href={`mailto:${data.email}`}>{data.email}</a>.
+      </>
+    ) : (
+      <span class="label">TODO: public email address</span>
+    )}
   </p>
+  <LinkRow withoutEmail />
+  <p class="label updated">Last updated {updated}</p>
 </footer>
+
+<style>
+  .email {
+    font-size: var(--step-1);
+  }
+
+  .email + :global(.link-row) {
+    margin-top: var(--space-4);
+  }
+
+  .updated {
+    margin-top: var(--space-7);
+  }
+</style>

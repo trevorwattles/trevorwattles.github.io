@@ -1,7 +1,21 @@
 ---
-// §5.4 — one 80–120 word paragraph in Trevor's voice. Drafted in Phase 1.
+// §5.4 — one short paragraph in Trevor's voice (the body of site.md).
+import { render } from "astro:content";
+import { getSite } from "../lib/site";
+
+const { Content } = await render(await getSite());
 ---
 
-<section id="about" aria-labelledby="about-heading">
+<section id="about" class="section wrap" aria-labelledby="about-heading">
   <h2 id="about-heading">About</h2>
+  <div class="prose">
+    <Content />
+  </div>
 </section>
+
+<style>
+  .prose {
+    font-size: var(--step-1);
+    line-height: 1.55;
+  }
+</style>

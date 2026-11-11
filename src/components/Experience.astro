@@ -1,7 +1,98 @@
 ---
-// §5.3 — roles newest first, then the education line. Copy in Phase 1.
+// §5.3 — roles newest first, then the education line.
+import { getSite } from "../lib/site";
+
+const { data } = await getSite();
 ---
 
-<section id="experience" aria-labelledby="experience-heading">
+<section
+  id="experience"
+  class="section wrap"
+  aria-labelledby="experience-heading"
+>
   <h2 id="experience-heading">Experience</h2>
+
+  <ol class="jobs">
+    {data.experience.map((job) => (
+      <li class="entry">
+        <p class="label when">{job.dates}</p>
+        <div>
+          <h3>{job.role}</h3>
+          <p class="where">
+            {job.company}
+            <span class="label"> · {job.location}</span>
+          </p>
+          <ul class="lines">
+            {job.lines.map((line) => (
+              <li>{line}</li>
+            ))}
+          </ul>
+        </div>
+      </li>
+    ))}
+  </ol>
+
+  <div class="entry education">
+    <p class="label when">Education</p>
+    <div>
+      <h3>{data.education.school}</h3>
+      <p class="where">{data.education.degree}</p>
+      {data.education.details && <p class="label">{data.education.details}</p>}
+    </div>
+  </div>
 </section>
+
+<style>
+  .jobs {
+    padding: 0;
+    list-style: none;
+  }
+
+  .entry {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  .entry + .entry,
+  .education {
+    margin-top: var(--space-6);
+  }
+
+  h3 {
+    font-size: var(--step-1);
+  }
+
+  .where {
+    margin-top: var(--space-1);
+    color: var(--ink-2);
+  }
+
+  .lines {
+    margin-top: var(--space-2);
+    padding-left: 1.1em;
+  }
+
+  .lines li::marker {
+    color: var(--muted);
+  }
+
+  .education {
+    padding-top: var(--space-6);
+    border-top: 1px solid var(--rule);
+  }
+
+  .education .label:last-child {
+    margin-top: var(--space-1);
+  }
+
+  @media (min-width: 760px) {
+    .entry {
+      grid-template-columns: 11rem 1fr;
+      gap: var(--space-6);
+    }
+
+    .when {
+      padding-top: 0.2em;
+    }
+  }
+</style>

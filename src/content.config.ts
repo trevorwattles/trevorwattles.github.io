@@ -13,7 +13,8 @@ const projects = defineCollection({
     dates: z.string(),
     context: z.string().optional(),
     stack: z.array(z.string()),
-    visibility: z.enum(["public", "private"]),
+    // Optional until Trevor confirms each project; the row shows a TODO when missing.
+    visibility: z.enum(["public", "private"]).optional(),
     links: z
       .object({
         live: z.url().optional(),
@@ -58,10 +59,32 @@ const other = defineCollection({
   }),
 });
 
-// §5 — intro, about, experience. Fields are defined in Phase 1 with Trevor.
+// §5 — intro, experience, education, links. The Markdown body is the About paragraph.
 const site = defineCollection({
   loader: glob({ pattern: "site.md", base: "./src/content" }),
-  schema: z.object({}),
+  schema: z.object({
+    intro: z.string(),
+    location: z.string(),
+    availability: z.string(),
+    email: z.string(), // empty string until Trevor confirms the public address
+    github: z.url(),
+    linkedin: z.url(),
+    resume: z.string(),
+    experience: z.array(
+      z.object({
+        role: z.string(),
+        company: z.string(),
+        location: z.string(),
+        dates: z.string(),
+        lines: z.array(z.string()).min(1).max(3),
+      }),
+    ),
+    education: z.object({
+      school: z.string(),
+      degree: z.string(),
+      details: z.string().optional(),
+    }),
+  }),
 });
 
 export const collections = { projects, other, site };

@@ -1,6 +1,8 @@
 ---
-// §5.2 / §10 — one project. index 0 is the featured row; even rows flip media side.
-import type { CollectionEntry } from "astro:content";
+// §5.2 / §10 — one project.
+// index 0: featured — full-width media, then description left / details right.
+// index 1+: two columns, media ~58% / text ~42%; even indexes put media on the right.
+import { render, type CollectionEntry } from "astro:content";
 import ProjectMedia from "./ProjectMedia.astro";
 
 interface Props {
@@ -8,11 +10,197 @@ interface Props {
   index: number;
 }
 
-const { project } = Astro.props;
-const { title } = project.data;
+const { project, index } = Astro.props;
+const { Content } = await render(project);
+const d = project.data;
+
+const featured = index === 0;
+const flip = !featured && index % 2 === 0;
+const headingId = `project-${project.id}`;
+
+const meta = [d.role, d.dates, d.context].filter(Boolean).join(" · ");
+const links = [
+  d.links.live && { href: d.links.live, label: "Live demo ↗" },
+  d.links.repo && { href: d.links.repo, label: "Code ↗" },
+  d.links.video && { href: d.links.video, label: "Walkthrough ↗" },
+].filter((l): l is { href: string; label: string } => Boolean(l));
 ---
 
-<article>
-  <h3>{title}</h3>
-  <ProjectMedia media={project.data.media} />
+<article
+  class:list={["project", { featured, flip }]}
+  aria-labelledby={headingId}
+>
+  <div class="media">
+    <ProjectMedia media={d.media} slug={project.id} featured={featured} />
+  </div>
+
+  <div class="text">
+    <div class="main">
+      <h3 id={headingId}>{d.title}</h3>
+      <p class="one-liner">{d.oneLiner}</p>
+      {!featured && <p class="label meta">{meta}</p>}
+      {!featured && <p class="label">{d.stack.join(" · ")}</p>}
+      <div class="body">
+        <Content />
+      </div>
+    </div>
+
+    <div class="details">
+      {featured && (
+        <dl class="facts">
+          <div>
+            <dt class="label">Role</dt>
+            <dd>{d.role}</dd>
+          </div>
+          <div>
+            <dt class="label">When</dt>
+            <dd>{d.dates}</dd>
+          </div>
+          {d.context && (
+            <div>
+              <dt class="label">Context</dt>
+              <dd>{d.context}</dd>
+            </div>
+          )}
+          <div>
+            <dt class="label">Stack</dt>
+            <dd>{d.stack.join(" · ")}</dd>
+          </div>
+        </dl>
+      )}
+      {d.result && <p class="result">{d.result}</p>}
+      {links.length > 0 ? (
+        <ul class="link-row">
+          {links.map((l) => (
+            <li>
+              <a href={l.href}>{l.label}</a>
+            </li>
+          ))}
+        </ul>
+      ) : d.visibility === "private" ? (
+        <p class="label">{d.privateNote}</p>
+      ) : (
+        <p class="label">TODO: links (repo, live demo, walkthrough)</p>
+      )}
+    </div>
+  </div>
 </article>
+
+<style>
+  .project {
+    padding-block: var(--space-7);
+  }
+
+  .project + .project {
+    border-top: 1px solid var(--rule);
+  }
+
+  .project:first-of-type {
+    padding-top: 0;
+  }
+
+  .project:last-of-type {
+    padding-bottom: 0;
+  }
+
+  .text {
+    margin-top: var(--space-5);
+  }
+
+  h3 {
+    font-size: var(--step-2);
+  }
+
+  .one-liner {
+    margin-top: var(--space-2);
+    font-size: var(--step-1);
+    line-height: 1.45;
+    color: var(--ink-2);
+  }
+
+  .meta {
+    margin-top: var(--space-4);
+  }
+
+  .body {
+    margin-top: var(--space-4);
+  }
+
+  .body :global(h4) {
+    margin-top: var(--space-5);
+    margin-bottom: var(--space-2);
+    font-size: var(--step-0);
+    font-weight: 500;
+  }
+
+  .body :global(h4:first-child) {
+    margin-top: 0;
+  }
+
+  .body :global(ul) {
+    padding-left: 1.1em;
+  }
+
+  .body :global(li + li) {
+    margin-top: var(--space-1);
+  }
+
+  .body :global(li::marker) {
+    color: var(--muted);
+  }
+
+  .details {
+    margin-top: var(--space-5);
+  }
+
+  .details > * + * {
+    margin-top: var(--space-4);
+  }
+
+  .facts {
+    display: grid;
+    gap: var(--space-3);
+  }
+
+  .facts dd {
+    margin: 0;
+  }
+
+  .result {
+    font-weight: 500;
+  }
+
+  @media (min-width: 760px) {
+    .project:not(.featured) {
+      display: grid;
+      grid-template-columns: 58fr 42fr;
+      gap: var(--space-7);
+      align-items: start;
+    }
+
+    .project.flip {
+      grid-template-columns: 42fr 58fr;
+    }
+
+    .project.flip .media {
+      order: 2;
+    }
+
+    .project:not(.featured) .text {
+      margin-top: 0;
+    }
+
+    .featured .text {
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: var(--space-7);
+      margin-top: var(--space-6);
+    }
+
+    .featured .details {
+      margin-top: 0;
+      padding-left: var(--space-5);
+      border-left: 1px solid var(--rule);
+    }
+  }
+</style>

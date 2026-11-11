@@ -1,0 +1,33 @@
+---
+// Email · GitHub · LinkedIn · Resume (PDF) as plain text links (§5.1, §5.5).
+import { getSite } from "../lib/site";
+
+interface Props {
+  /** Leave out the email link (the footer shows the address in a sentence). */
+  withoutEmail?: boolean;
+}
+
+const { withoutEmail = false } = Astro.props;
+const { data } = await getSite();
+---
+
+<ul class="link-row">
+  {!withoutEmail && (
+    <li>
+      {data.email ? (
+        <a href={`mailto:${data.email}`}>{data.email}</a>
+      ) : (
+        <span class="label">TODO: email</span>
+      )}
+    </li>
+  )}
+  <li>
+    <a href={data.github}>GitHub</a>
+  </li>
+  <li>
+    <a href={data.linkedin}>LinkedIn</a>
+  </li>
+  <li>
+    <a href={data.resume}>Resume (PDF)</a>
+  </li>
+</ul>
