@@ -1,7 +1,7 @@
 ---
 # TODO: confirm title, role, dates, context (course?), stack, visibility, links
 title: Chess Server
-order: 2
+order: 3
 oneLiner: A chess server with a client-server architecture over HTTP and WebSockets.
 role: "TODO: role"
 dates: "TODO: dates"

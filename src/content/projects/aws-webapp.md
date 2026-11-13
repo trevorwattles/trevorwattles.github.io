@@ -1,7 +1,7 @@
 ---
 # TODO: confirm title, role, dates, stack, visibility, links
 title: AWS Web App # TODO: real name
-order: 3
+order: 4
 oneLiner: A full-stack web application built with core web technologies and deployed on AWS.
 role: "TODO: role"
 dates: "TODO: dates"

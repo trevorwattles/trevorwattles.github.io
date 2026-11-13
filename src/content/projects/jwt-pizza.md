@@ -3,7 +3,7 @@
 # the CI workflow files, the incident report, and the pen-test report.
 # The React frontend and Express service started as course code; only Trevor's work is described.
 title: JWT Pizza
-order: 4
+order: 2
 oneLiner: The testing and DevOps side of a pizza-ordering web app, with automated tests, CI/CD pipelines that deploy to AWS, and live monitoring with alerts.
 role: Testing, CI/CD, and AWS deployment
 dates: Sep – Dec 2025
