@@ -20,6 +20,8 @@ const projects = defineCollection({
         live: z.url().optional(),
         repo: z.url().optional(),
         video: z.url().optional(),
+        // A site path to a PDF in public/, e.g. "/papers/home-price-prediction.pdf".
+        paper: z.string().startsWith("/").optional(),
       })
       .default({}),
     privateNote: z

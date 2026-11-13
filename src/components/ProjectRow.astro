@@ -21,11 +21,17 @@ const flip = !featured && index % 2 === 0;
 const headingId = `project-${project.id}`;
 
 const meta = [d.role, d.dates, d.context].filter(Boolean).join(" · ");
+type Link = { href: string; label: string; newTab?: boolean };
 const links = [
   d.links.live && { href: d.links.live, label: "Live demo ↗" },
   d.links.repo && { href: d.links.repo, label: "Code ↗" },
   d.links.video && { href: d.links.video, label: "Walkthrough ↗" },
-].filter((l): l is { href: string; label: string } => Boolean(l));
+  d.links.paper && {
+    href: d.links.paper,
+    label: "Read the paper (PDF)",
+    newTab: true,
+  },
+].filter((l): l is Link => Boolean(l));
 ---
 
 <article
@@ -83,7 +89,13 @@ const links = [
         <ul class="link-row">
           {links.map((l) => (
             <li>
-              <a href={l.href}>{l.label}</a>
+              {l.newTab ? (
+                <a href={l.href} target="_blank" rel="noopener noreferrer">
+                  {l.label}
+                </a>
+              ) : (
+                <a href={l.href}>{l.label}</a>
+              )}
             </li>
           ))}
         </ul>
