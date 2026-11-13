@@ -1,7 +1,7 @@
 ---
 # Facts from Trevor and the team paper (public/papers/home-price-prediction.pdf).
 title: Home Price Prediction
-order: 5
+order: 2
 oneLiner: Predicting Las Vegas home sale prices from 11,000 real MLS sales with an ensemble of machine learning models.
 role: Team member, 5-person ML project
 dates: Winter 2024
