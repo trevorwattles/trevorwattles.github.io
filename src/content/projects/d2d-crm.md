@@ -1,7 +1,6 @@
 ---
-title: D2D Sales CRM # TODO: confirm name
+title: Door-to-Door Sales CRM
 order: 1
-# TODO: confirm "door-to-door" — nothing in the code says so; if it's a general sales CRM, say "a sales team".
 oneLiner: A custom CRM for a door-to-door sales team that calculates automated rep payouts, tracks performance metrics, and manages incentive reward programs.
 role: Full-Stack Developer
 dates: Apr – Jun 2026
