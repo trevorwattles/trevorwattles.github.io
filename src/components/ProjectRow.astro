@@ -2,9 +2,12 @@
 // §5.2 / §10 — one project.
 // Title + one-liner always come first, above the media.
 // index 0: featured — title, full-width media, then description left / details right.
-// index 1+: media ~58% / text ~42%, title at the top of the text column;
-//           even indexes put media on the right. Below 760px everything stacks.
-import { render, type CollectionEntry } from "astro:content";
+// index 1+ (desktop): media column ~58% with "The hard part" under the image,
+//           text column ~42% with title, meta, "What I built", and links.
+//           Even indexes put media on the right.
+// Below 760px everything stacks in reading order:
+//   title, media, meta + "What I built", "The hard part", links.
+import type { CollectionEntry } from "astro:content";
 import ProjectMedia from "./ProjectMedia.astro";
 
 interface Props {
@@ -13,12 +16,17 @@ interface Props {
 }
 
 const { project, index } = Astro.props;
-const { Content } = await render(project);
 const d = project.data;
 
 const featured = index === 0;
 const flip = !featured && index % 2 === 0;
 const headingId = `project-${project.id}`;
+
+// Split the Markdown body at "The hard part" so it can sit under the image.
+const html = project.rendered?.html ?? "";
+const split = html.search(/<h4[^>]*>\s*The hard part\s*<\/h4>/i);
+const builtHtml = featured || split < 0 ? html : html.slice(0, split);
+const hardHtml = featured || split < 0 ? "" : html.slice(split);
 
 const meta = [d.role, d.dates, d.context].filter(Boolean).join(" · ");
 type Link = { href: string; label: string; newTab?: boolean };
@@ -38,79 +46,109 @@ const links = [
   class:list={["project", { featured, flip }]}
   aria-labelledby={headingId}
 >
-  <header class="head">
-    <h3 id={headingId}>{d.title}</h3>
-    <p class="one-liner">{d.oneLiner}</p>
-  </header>
+  <div class="col-text">
+    <header class="head">
+      <h3 id={headingId}>{d.title}</h3>
+      <p class="one-liner">{d.oneLiner}</p>
+    </header>
 
-  <div class="media">
-    <ProjectMedia
-      media={d.media}
-      layout={d.mediaLayout}
-      slug={project.id}
-      featured={featured}
-    />
-  </div>
+    <div class="text">
+      <div class="main">
+        {!featured && <p class="label meta">{meta}</p>}
+        {!featured && <p class="label">{d.stack.join(" · ")}</p>}
+        <div class="body" set:html={builtHtml} />
+      </div>
 
-  <div class="text">
-    <div class="main">
-      {!featured && <p class="label meta">{meta}</p>}
-      {!featured && <p class="label">{d.stack.join(" · ")}</p>}
-      <div class="body">
-        <Content />
+      <div class="details">
+        {featured && (
+          <dl class="facts">
+            <div>
+              <dt class="label">Role</dt>
+              <dd>{d.role}</dd>
+            </div>
+            <div>
+              <dt class="label">When</dt>
+              <dd>{d.dates}</dd>
+            </div>
+            {d.context && (
+              <div>
+                <dt class="label">Context</dt>
+                <dd>{d.context}</dd>
+              </div>
+            )}
+            <div>
+              <dt class="label">Stack</dt>
+              <dd>{d.stack.join(" · ")}</dd>
+            </div>
+          </dl>
+        )}
+        {d.result && <p class="result">{d.result}</p>}
+        {links.length > 0 ? (
+          <ul class="link-row">
+            {links.map((l) => (
+              <li>
+                {l.newTab ? (
+                  <a href={l.href} target="_blank" rel="noopener noreferrer">
+                    {l.label}
+                  </a>
+                ) : (
+                  <a href={l.href}>{l.label}</a>
+                )}
+              </li>
+            ))}
+          </ul>
+        ) : d.visibility === "private" ? (
+          <p class="label">{d.privateNote}</p>
+        ) : (
+          <p class="label">TODO: links (repo, live demo, walkthrough)</p>
+        )}
       </div>
     </div>
+  </div>
 
-    <div class="details">
-      {featured && (
-        <dl class="facts">
-          <div>
-            <dt class="label">Role</dt>
-            <dd>{d.role}</dd>
-          </div>
-          <div>
-            <dt class="label">When</dt>
-            <dd>{d.dates}</dd>
-          </div>
-          {d.context && (
-            <div>
-              <dt class="label">Context</dt>
-              <dd>{d.context}</dd>
-            </div>
-          )}
-          <div>
-            <dt class="label">Stack</dt>
-            <dd>{d.stack.join(" · ")}</dd>
-          </div>
-        </dl>
-      )}
-      {d.result && <p class="result">{d.result}</p>}
-      {links.length > 0 ? (
-        <ul class="link-row">
-          {links.map((l) => (
-            <li>
-              {l.newTab ? (
-                <a href={l.href} target="_blank" rel="noopener noreferrer">
-                  {l.label}
-                </a>
-              ) : (
-                <a href={l.href}>{l.label}</a>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : d.visibility === "private" ? (
-        <p class="label">{d.privateNote}</p>
-      ) : (
-        <p class="label">TODO: links (repo, live demo, walkthrough)</p>
-      )}
+  <div class="col-media">
+    <div class="media">
+      <ProjectMedia
+        media={d.media}
+        layout={d.mediaLayout}
+        slug={project.id}
+        featured={featured}
+      />
     </div>
+    {hardHtml && <div class="body hard" set:html={hardHtml} />}
   </div>
 </article>
 
 <style>
+  /* Base (phones, and the featured row at every width): one column.
+     The wrappers dissolve so their children can be ordered for reading. */
   .project {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
     padding-block: var(--space-7);
+  }
+
+  .col-text,
+  .col-media,
+  .text {
+    display: contents;
+  }
+
+  .head {
+    order: 1;
+  }
+  .media {
+    order: 2;
+  }
+  .main {
+    order: 3;
+  }
+  .hard {
+    order: 4;
+  }
+  .details {
+    order: 5;
   }
 
   .project + .project {
@@ -123,11 +161,6 @@ const links = [
 
   .project:last-of-type {
     padding-bottom: 0;
-  }
-
-  .media,
-  .text {
-    margin-top: var(--space-5);
   }
 
   h3 {
@@ -173,10 +206,6 @@ const links = [
     color: var(--muted);
   }
 
-  .details {
-    margin-top: var(--space-5);
-  }
-
   .details > * + * {
     margin-top: var(--space-4);
   }
@@ -195,53 +224,70 @@ const links = [
   }
 
   @media (min-width: 760px) {
+    /* Featured: title, full-width media, then description | details. */
+    .featured .text {
+      order: 3;
+      display: grid;
+      grid-template-columns: 1.6fr 1fr;
+      gap: var(--space-7);
+      margin-top: var(--space-2);
+    }
+
+    .featured .media {
+      margin-top: var(--space-2);
+    }
+
+    .featured .details {
+      padding-left: var(--space-5);
+      border-left: 1px solid var(--rule);
+    }
+
+    /* Alternating rows: two real columns. */
     .project:not(.featured) {
       display: grid;
       grid-template-columns: 58fr 42fr;
-      grid-template-rows: auto 1fr;
-      grid-template-areas:
-        "media head"
-        "media text";
       column-gap: var(--space-7);
       align-items: start;
     }
 
     .project.flip {
       grid-template-columns: 42fr 58fr;
-      grid-template-areas:
-        "head media"
-        "text media";
     }
 
-    .project:not(.featured) .head {
-      grid-area: head;
+    .project:not(.featured) .col-text,
+    .project:not(.featured) .col-media,
+    .project:not(.featured) .text {
+      display: block;
     }
 
-    .project:not(.featured) .media {
-      grid-area: media;
-      margin-top: 0;
+    .project:not(.featured) .col-media {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .project:not(.featured) .col-text {
+      grid-column: 2;
+      grid-row: 1;
+    }
+
+    .project.flip .col-media {
+      grid-column: 2;
+    }
+
+    .project.flip .col-text {
+      grid-column: 1;
     }
 
     .project:not(.featured) .text {
-      grid-area: text;
       margin-top: var(--space-4);
     }
 
-    .featured .media {
-      margin-top: var(--space-6);
+    .project:not(.featured) .details {
+      margin-top: var(--space-5);
     }
 
-    .featured .text {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr;
-      gap: var(--space-7);
+    .project:not(.featured) .hard {
       margin-top: var(--space-6);
-    }
-
-    .featured .details {
-      margin-top: 0;
-      padding-left: var(--space-5);
-      border-left: 1px solid var(--rule);
     }
   }
 </style>
