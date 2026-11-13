@@ -1,22 +1,25 @@
 ---
-// §7 / §10 — hero image plus up to two thumbnails.
+// §7 / §10 — project media.
 // Images live in src/assets/projects/<slug>/ and are listed in the project's
 // `media` frontmatter. With no media, a 16:10 placeholder stands in.
+//   layout "stack" (default): hero image, up to two thumbnails beneath.
+//   layout "pair": images side by side at equal size (stacked below 760px).
 // Each image links to its full-size file (works without JS); the lightbox
 // enhances these links in Phase 3. Video loops also arrive in Phase 3.
 import { Picture } from "astro:assets";
 import type { ImageMetadata } from "astro";
 import type { CollectionEntry } from "astro:content";
 
-type Media = CollectionEntry<"projects">["data"]["media"];
+type Data = CollectionEntry<"projects">["data"];
 
 interface Props {
-  media: Media;
+  media: Data["media"];
+  layout: Data["mediaLayout"];
   slug: string;
   featured: boolean;
 }
 
-const { media, slug, featured } = Astro.props;
+const { media, layout, slug, featured } = Astro.props;
 
 const images = import.meta.glob<{ default: ImageMetadata }>(
   "/src/assets/projects/**/*.{png,jpg,jpeg,webp,avif}",
@@ -32,49 +35,77 @@ const items = media
     return { ...m, img };
   });
 
+const pair = layout === "pair" && items.length > 1;
 const [hero, ...thumbs] = items;
-const heroSizes = featured
+
+// Rendered width of each image, so the browser picks a sensible srcset entry.
+const full = featured
   ? "(min-width: 76rem) 72rem, calc(100vw - 2rem)"
   : "(min-width: 760px) 55vw, calc(100vw - 2rem)";
+const half = featured
+  ? "(min-width: 76rem) 36rem, (min-width: 760px) 50vw, calc(100vw - 2rem)"
+  : "(min-width: 760px) 28vw, calc(100vw - 2rem)";
+const heroSizes = pair ? half : full;
+const eager = featured ? "eager" : "lazy";
 ---
 
-{hero ? (
-  <figure>
-    <a class="frame" href={hero.img.src}>
-      <Picture
-        src={hero.img}
-        alt={hero.alt}
-        formats={["avif", "webp"]}
-        widths={[640, 960, 1280, 1920, 2560]}
-        sizes={heroSizes}
-        loading={featured ? "eager" : "lazy"}
-      />
-    </a>
-    {hero.caption && <figcaption class="label">{hero.caption}</figcaption>}
-  </figure>
-) : (
+{!hero ? (
   <div class="frame placeholder" aria-hidden="true">
     <span class="label">Screenshot coming soon</span>
   </div>
-)}
-{thumbs.length > 0 && (
-  <div class="thumbs">
-    {thumbs.map((t) => (
+) : pair ? (
+  <div class="pair" style={`--cols: ${items.length}`}>
+    {items.map((m) => (
       <figure>
-        <a class="frame" href={t.img.src}>
+        <a class="frame" href={m.img.src}>
           <Picture
-            src={t.img}
-            alt={t.alt}
+            src={m.img}
+            alt={m.alt}
             formats={["avif", "webp"]}
-            widths={[480, 960]}
-            sizes="(min-width: 760px) 28vw, 50vw"
-            loading="lazy"
+            widths={[640, 960, 1280, 1920]}
+            sizes={heroSizes}
+            loading={eager}
           />
         </a>
-        {t.caption && <figcaption class="label">{t.caption}</figcaption>}
+        {m.caption && <figcaption class="label">{m.caption}</figcaption>}
       </figure>
     ))}
   </div>
+) : (
+  <>
+    <figure>
+      <a class="frame" href={hero.img.src}>
+        <Picture
+          src={hero.img}
+          alt={hero.alt}
+          formats={["avif", "webp"]}
+          widths={[640, 960, 1280, 1920, 2560]}
+          sizes={heroSizes}
+          loading={eager}
+        />
+      </a>
+      {hero.caption && <figcaption class="label">{hero.caption}</figcaption>}
+    </figure>
+    {thumbs.length > 0 && (
+      <div class="thumbs">
+        {thumbs.map((t) => (
+          <figure>
+            <a class="frame" href={t.img.src}>
+              <Picture
+                src={t.img}
+                alt={t.alt}
+                formats={["avif", "webp"]}
+                widths={[480, 960]}
+                sizes="(min-width: 760px) 28vw, 50vw"
+                loading="lazy"
+              />
+            </a>
+            {t.caption && <figcaption class="label">{t.caption}</figcaption>}
+          </figure>
+        ))}
+      </div>
+    )}
+  </>
 )}
 
 <style>
@@ -112,5 +143,16 @@ const heroSizes = featured
     grid-template-columns: repeat(2, 1fr);
     gap: var(--space-4);
     margin-top: var(--space-4);
+  }
+
+  .pair {
+    display: grid;
+    gap: var(--space-5);
+  }
+
+  @media (min-width: 760px) {
+    .pair {
+      grid-template-columns: repeat(var(--cols), 1fr);
+    }
   }
 </style>

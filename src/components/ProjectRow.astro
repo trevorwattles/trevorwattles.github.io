@@ -31,7 +31,12 @@ const links = [
   aria-labelledby={headingId}
 >
   <div class="media">
-    <ProjectMedia media={d.media} slug={project.id} featured={featured} />
+    <ProjectMedia
+      media={d.media}
+      layout={d.mediaLayout}
+      slug={project.id}
+      featured={featured}
+    />
   </div>
 
   <div class="text">

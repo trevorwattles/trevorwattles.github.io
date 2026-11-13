@@ -44,6 +44,8 @@ const projects = defineCollection({
       )
       .max(3)
       .default([]),
+    // "stack": hero + thumbnails beneath. "pair": images side by side, equal size.
+    mediaLayout: z.enum(["stack", "pair"]).default("stack"),
     draft: z.boolean().default(false), // drafts don't render
   }),
 });

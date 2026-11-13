@@ -6,7 +6,17 @@ oneLiner: A custom CRM for a door-to-door sales team that calculates automated r
 role: "TODO: role"
 dates: "TODO: dates"
 stack: ["TODO: stack"]
-media: [] # screenshots with MOCK DATA only (§1.2)
+# Screenshots use MOCK DATA only (§1.2).
+mediaLayout: pair
+media:
+  - type: image
+    src: dashboard.png
+    alt: Team dashboard with counts of contacts, accounts, opportunities, and tasks, above a leaderboard of the month's top sales reps ranked by number of sales.
+    caption: Team dashboard and monthly sales leaderboard, mock data
+  - type: image
+    src: payouts.png
+    alt: Payouts page showing pending and paid commission totals for the current pay period, and a table of payout runs by period with rep count, total, and status.
+    caption: Commission payouts by pay period, mock data
 draft: false
 ---
 
