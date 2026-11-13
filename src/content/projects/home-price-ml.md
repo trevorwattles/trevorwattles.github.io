@@ -4,7 +4,7 @@ title: Home Price Prediction
 order: 5
 oneLiner: Predicting Las Vegas home sale prices from 11,000 real MLS sales with an ensemble of machine learning models.
 role: Team member, 5-person ML project
-dates: Oct – Dec 2024 # TODO: the paper's header says "CS 270, Winter 2024" — confirm which is right
+dates: Winter 2024
 context: BYU CS 270
 stack:
   - Python
