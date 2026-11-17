@@ -27,7 +27,7 @@ media:
 draft: false
 ---
 
-#### What I built
+#### Notable work
 
 - Rebuilt the payouts workflow: a detail page for each payout run showing every rep, a per-deal breakdown of how each commission was calculated, and a redesigned manual-payout form.
 - Built the admin side of the gamification system: badge tiers, badge duplication, badge detail pages linked to goals, and scoring-model management.

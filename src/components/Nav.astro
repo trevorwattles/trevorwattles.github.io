@@ -1,13 +1,15 @@
 ---
 // §5 / §10 — plain links. Sticky with a hairline on desktop, static on mobile.
-import { getSite } from "../lib/site";
+import { getSite, hasFileInPublic } from "../lib/site";
 
 const { data } = await getSite();
 const links = [
   { href: "#work", label: "Work" },
   { href: "#experience", label: "Experience" },
   { href: "#about", label: "About" },
-  { href: data.resume, label: "Resume" },
+  ...(hasFileInPublic(data.resume)
+    ? [{ href: data.resume, label: "Resume" }]
+    : []),
   { href: "#contact", label: "Contact" },
 ];
 ---

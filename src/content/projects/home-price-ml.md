@@ -1,9 +1,8 @@
 ---
 # Facts from Trevor and the team paper (public/papers/home-price-prediction.pdf).
 title: Home Price Prediction
-order: 2
+order: 3
 oneLiner: Predicting Las Vegas home sale prices from 11,000 real MLS sales with an ensemble of machine learning models.
-role: Team member, 5-person ML project
 dates: Winter 2024
 context: BYU CS 270
 stack:
@@ -25,7 +24,7 @@ media:
 draft: false
 ---
 
-#### What we built
+#### Notable work
 
 - Cleaned and encoded 11,000 Las Vegas home sales from the Multiple Listing Service (MLS), turning categorical fields, dates, and yes/no amenities into model-ready features.
 - Geocoded every address to latitude/longitude with a two-pass pipeline: free Nominatim lookups first, results outside Las Vegas filtered out, and the ~4,000 failures retried through the Google Geocoding API.

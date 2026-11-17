@@ -4,6 +4,7 @@
 // `media` frontmatter. With no media, a 16:10 placeholder stands in.
 //   layout "stack" (default): hero image, up to two thumbnails beneath.
 //   layout "pair": images side by side at equal size (stacked below 760px).
+//   layout "column": every image full size, one under the other.
 // Each image links to its full-size file (works without JS); the lightbox
 // enhances these links in Phase 3. Video loops also arrive in Phase 3.
 import { Picture } from "astro:assets";
@@ -35,7 +36,9 @@ const items = media
     return { ...m, img };
   });
 
-const pair = layout === "pair" && items.length > 1;
+// "pair" and "column" share one equal-size grid; column just uses one column.
+const pair = (layout === "pair" || layout === "column") && items.length > 1;
+const cols = layout === "column" ? 1 : items.length;
 const [hero, ...thumbs] = items;
 
 // Rendered width of each image, so the browser picks a sensible srcset entry.
@@ -45,7 +48,7 @@ const full = featured
 const half = featured
   ? "(min-width: 76rem) 36rem, (min-width: 760px) 50vw, calc(100vw - 2rem)"
   : "(min-width: 760px) 28vw, calc(100vw - 2rem)";
-const heroSizes = pair ? half : full;
+const heroSizes = pair && cols > 1 ? half : full;
 const eager = featured ? "eager" : "lazy";
 ---
 
@@ -54,7 +57,7 @@ const eager = featured ? "eager" : "lazy";
     <span class="label">Screenshot coming soon</span>
   </div>
 ) : pair ? (
-  <div class="pair" style={`--cols: ${items.length}`}>
+  <div class="pair" style={`--cols: ${cols}`}>
     {items.map((m) => (
       <figure>
         <a class="frame" href={m.img.src}>

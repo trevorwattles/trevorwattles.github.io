@@ -62,10 +62,12 @@ const links = [
       <div class="details">
         {featured && (
           <dl class="facts">
-            <div>
-              <dt class="label">Role</dt>
-              <dd>{d.role}</dd>
-            </div>
+            {d.role && (
+              <div>
+                <dt class="label">Role</dt>
+                <dd>{d.role}</dd>
+              </div>
+            )}
             <div>
               <dt class="label">When</dt>
               <dd>{d.dates}</dd>

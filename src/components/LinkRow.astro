@@ -1,6 +1,6 @@
 ---
 // Email · GitHub · LinkedIn · Resume (PDF) as plain text links (§5.1, §5.5).
-import { getSite } from "../lib/site";
+import { getSite, hasFileInPublic } from "../lib/site";
 
 interface Props {
   /** Leave out the email link (the footer shows the address in a sentence). */
@@ -27,7 +27,9 @@ const { data } = await getSite();
   <li>
     <a href={data.linkedin}>LinkedIn</a>
   </li>
-  <li>
-    <a href={data.resume}>Resume (PDF)</a>
-  </li>
+  {hasFileInPublic(data.resume) && (
+    <li>
+      <a href={data.resume}>Resume (PDF)</a>
+    </li>
+  )}
 </ul>

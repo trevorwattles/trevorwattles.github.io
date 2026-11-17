@@ -1,31 +1,42 @@
 ---
 # Aaron Olsen (owner) confirmed Trevor may showcase this project (Nov 2026).
-# Sources: Trevor's 189 commits in orbizon/ainotes (Jun 10 – Sep 20, 2026) and midots.ai.
-# ~/Downloads/api is EnrollPro's repo and is NOT part of this project.
+# Sources: Trevor's 189 commits in orbizon/ainotes (Jun 10 – Sep 20, 2026), midots.ai's
+# public product page, and Trevor's screenshots. ~/Downloads/api is EnrollPro's repo and is
+# NOT part of this project.
 title: MiDOTs
-order: 6
-oneLiner: An AI study app that turns students' own class notes into improved notes, quizzes, flashcards, and an AI tutor.
-role: Developer, 3-person team
+order: 2
+oneLiner: An AI study app built around students' own class notes. The AI fills out rough notes, turns them into quizzes and flashcards, and runs study sessions as Ace, a tutor that quizzes you instead of doing your work.
+role: Developer
 dates: Jun – Sep 2026
 stack:
   - JavaScript
   - PHP
   - CSS
+  - OpenAI API
   - Playwright
 visibility: private
 privateNote: Private company codebase
 links:
   live: https://midots.ai
-media: [] # TODO: calendar week view + canvas board with a note's AI chat open (demo account, made-up notes)
+mediaLayout: column
+media:
+  - type: image
+    src: study-home.png
+    alt: The Study home page with a prompt to turn notes into flashcards and quizzes, a row of quick-learn question cards, and the student's study spaces.
+    caption: Study home, where notes become flashcards and quizzes
+  - type: image
+    src: ace-tutor-session.png
+    alt: An Ace tutor session for a history course, where the AI introduces what the test covers and asks a multiple-choice question about Reconstruction, with a chat box to message Ace below.
+    caption: Ace, the AI tutor, quizzing from a student's history notes
 draft: false
 ---
 
-#### What I built
+#### Notable work
 
+- Built AI features that run through the notes: semantic search over notes using embeddings with a keyword fallback, vision support so the AI can read photos and hand drawings, and chat tools that let the AI edit a note or put it on the calendar with the event linked back to the note.
+- Made AI edits dependable: an edit the AI confirms in chat always lands in the note, later saves can't overwrite it, and the change history stays bounded when the AI rewrites a large note. Each note can also carry its own AI chat, placed at the bottom, on the right, or turned off.
 - Built out the calendar: day and week views on one shared time grid, an agenda that says what repeats ("Repeats weekly on Mon, Thu"), recurring events with custom frequencies, and scheduling goals, reminders, and tasks straight from a note.
-- Reworked the canvas board and document views: one floating control pill, a merged formatting toolbar, a freehand drawing tool, and per-note AI chat that can sit at the bottom, on the right, or off for just that note.
-- Rebuilt Explorer search results with a table/cards toggle and a collapsible tag filter, and closed an HTML-injection hole where a note containing escaped markup came back as live HTML in its search snippet.
-- Added 27 automated test files (22 unit, 5 Playwright end-to-end) covering the calendar, board gestures, and per-note AI chat.
+- Reworked the canvas board, document view, and Explorer search, closed an HTML-injection hole in search snippets, and added 27 automated test files (22 unit, 5 Playwright end-to-end).
 
 #### The hard part
 

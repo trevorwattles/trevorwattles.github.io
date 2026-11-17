@@ -9,7 +9,7 @@ const projects = defineCollection({
     title: z.string(),
     order: z.number().int().positive(), // 1 = featured/largest
     oneLiner: z.string(), // one sentence, what it does, no adjectives
-    role: z.string(),
+    role: z.string().optional(), // left out when the description already makes it clear
     dates: z.string(),
     context: z.string().optional(),
     stack: z.array(z.string()),
@@ -47,7 +47,8 @@ const projects = defineCollection({
       .max(3)
       .default([]),
     // "stack": hero + thumbnails beneath. "pair": images side by side, equal size.
-    mediaLayout: z.enum(["stack", "pair"]).default("stack"),
+    // "column": every image full size, one under the other, in list order.
+    mediaLayout: z.enum(["stack", "pair", "column"]).default("stack"),
     draft: z.boolean().default(false), // drafts don't render
   }),
 });
