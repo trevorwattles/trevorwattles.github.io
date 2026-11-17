@@ -37,6 +37,6 @@ education:
   details: GPA 3.93 (4.0 in major) · Dean's List
 ---
 
-<!-- About paragraph (80–120 words, Trevor's voice). DRAFT from CLAUDE.md §5.4 facts only. TODO: Trevor rewrites. -->
+<!-- About paragraph. Trevor chose this version (option 9) on 2026-11-17. -->
 
-I'm originally from Las Vegas. I served two years as a volunteer representative in France, and I speak French. I co-run Anthem Gutters, a gutter-guard business in Utah, and I built its website. I also take on freelance web development work. I'm an Eagle Scout.
+I grew up in Las Vegas and served two years as a volunteer representative in France, where I spoke French every day. Now I build software at two jobs: the backend of the J. Reuben Clark Law School's information system at BYU, and full-stack features at EnrollPro. Building something new is my favorite part of the work, and lately that usually means AI. I also co-run Anthem Gutters, a gutter-guard business in Utah, and I built its website.
