@@ -15,9 +15,7 @@ stack:
   - OpenAI API
   - Playwright
 visibility: private
-privateNote: Private company codebase
-links:
-  live: https://midots.ai
+privateNote: Private repo · Walkthrough available upon request
 mediaLayout: column
 media:
   - type: image
