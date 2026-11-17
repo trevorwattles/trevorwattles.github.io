@@ -3,9 +3,9 @@ import { defineConfig } from "astro/config";
 
 // https://docs.astro.build/en/reference/configuration-reference/
 export default defineConfig({
-  // User-site repo (trevorwattles.github.io), so no `base` is needed.
-  // When the custom domain is set up: change this to "https://<domain>"
-  // and add public/CNAME containing the domain (§13.3).
-  site: "https://trevorwattles.github.io",
+  // Custom domain on a user-site repo, served from the root, so no `base`.
+  // The domain itself is set in the repo's Pages settings (Actions deploys
+  // ignore CNAME files); public/CNAME is kept to match it.
+  site: "https://trevorwattles.com",
   output: "static",
 });

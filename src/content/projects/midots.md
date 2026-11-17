@@ -3,9 +3,9 @@
 # Sources: Trevor's 189 commits in orbizon/ainotes (Jun 10 – Sep 20, 2026), midots.ai's
 # public product page, and Trevor's screenshots. ~/Downloads/api is EnrollPro's repo and is
 # NOT part of this project.
-title: MiDOTs
+title: AI Study App
 order: 2
-oneLiner: An AI study app built around students' own class notes. The AI fills out rough notes, turns them into quizzes and flashcards, and runs study sessions as Ace, a tutor that quizzes you instead of doing your work.
+oneLiner: A study app built around students' own class notes. The AI fills out rough notes, turns them into quizzes and flashcards, and runs study sessions as Ace, a tutor that quizzes you instead of doing your work.
 role: Developer
 dates: Jun – Sep 2026
 stack:
